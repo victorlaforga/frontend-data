@@ -1,5 +1,5 @@
 import { runQuery, url, query } from "./function.js";
-
+// 
 export function useData() {
   runQuery(url, query).then(results => {
     
@@ -7,14 +7,14 @@ export function useData() {
 
     const cleanData = lengthObjects.map(size => {
       size = size.toLowerCase();
-
+      size = size.replace(/,/g, ".");
       // regex expression which matches all characters except in between ()
       size = size.replace(size.match(/\(.*?\)/g), "");
       // regex expression which matches all characters except: l, numbers, '.' , whitespace & x
       size = size.replace(/[^l0-9\d\sx.]/g, "");
 
       if (typeof size === "string") {
-        size = size.replace(/,/g, ".");
+        
 
         if (size.match("l")) {
           return size.slice(0, 7).replace(/[^0-9/.]/g, "");
@@ -46,7 +46,26 @@ export function useData() {
       restOfData[count].size = dataIntoNumber[count];
     }
     const restOfDataWithSize = restOfData;
-    const data = restOfDataWithSize;
+
+    let sizesFilter = restOfDataWithSize.filter(element => {
+      
+      return !Number.isNaN(element.size);
+  
+    });
+    const dataWithoutSmallValues = sizesFilter.filter(element => {
+      if(element.size > 2) {
+        return element.size;
+      }
+    });
+
+    let data = dataWithoutSmallValues;
+    console.log(data);
+
+    
+    
+    
+
+    
     
 
     // tooltip samen met Gio gemaakt
@@ -57,56 +76,87 @@ export function useData() {
       .style("overflow", "scroll")
       .style("visibility", "hidden");
     const width = 100000;
-    const height = 550;
+    const height = d3.max(data.map(element => {return element.size}));
     const barWidth = 70;
     const barOffset = 5;
-    const scale = d3.scaleLinear()
-                  .domain([d3.min(data), d3.max(data)])
-                  .range([0, width - 100]);
 
-    // Add scales to axis
-    const y_axis = d3.axisLeft()
-                   .scale(scale);
-    const x_axis = d3.axisBottom()
-                     .scale(scale);    
+    const yScale = d3.scaleLinear()
+                  .domain([0, d3.max(data, function(d){return d.size})])
+                  .range([0, height]);
+                  
 
-
-            
-                   
-
-    const myChart = d3
-      .select("#content")
-      .append("svg")
-      .call(x_axis)
-      .call(y_axis)
-      .attr("width", width)
-      .attr("height", height)
-      .selectAll("rect")
-      .data(data)
-      .enter()
-      .append("rect")
-      
-      .attr("width", barWidth)
-      .attr("height", function(d) {
+    const xScale = d3.scaleBand()
+                     .domain([d3.min(data), d3.max(data)])
+                     .rangeRound([0, width], 0.09)
+          
+// const images = [football]
+// console.log(images)
+const svg = d3.select("#content")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    
+    
+//Create bars
+svg.selectAll("rect")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d, i) {
+              return i * (barWidth + barOffset);
+            })
+    .attr("y", function(d) {
+              return height - d.size;
+            })
+    .attr("width", barWidth)
+    .attr("height", function(d) {
         return d.size;
-      })
-      .on("mouseout", function() {
-        tooltip.style("visibility", "hidden");
-      })
-      .on("click", d => {
-        tooltip.style("visibility", "visible")
-                .text(d.title);
-                
-      })
-      .attr("x", function(d, i) {
-        return i * (barWidth + barOffset);
-      })
-      .attr("y", function(d) {
-        return height - d.size;
-      });
+    })
+    .on("mouseout", function() {
+              tooltip.style("visibility", "hidden");
+            })
+    .on("click", d => {
+              tooltip.style("visibility", "visible")
+                      .append("h3")
+                      .text(d.title)
+                      .style("font-family", `'Josefin Sans', sans-serif`)
+                      .append("p")
+                      .text("Regio: " + d.regio)
+                      .append("img")
+                      .attr('src', d.pic);
+                              
+            })
+// Create text on bar (length object in cm)
+    svg.selectAll("text")
+    .data(data)
+    .enter()
+    .append("text")
+    .text(function(d) {
+        return d.size;
+    })
+    .attr("text-anchor", "middle")
+    .attr("x", function(d, i) {
+      return i * (barWidth + barOffset) + 37;
+    })
+    .attr("y", function(d) {
+        return height - (d.size + 4);
+    })
+    .attr("font-family", "sans-serif")
+    .attr("font-size", "20px")
+    .attr("fill", "white");
 
-    return cleanData;
-  });
+// Sort from low to high
+svg.selectAll("rect")
+d3.select('#lowToHigh')
+    .on('click', function() {
+        data = dataWithoutSmallValues.map(element => {
+          return element.size;
+        }).sort(d3.ascending);
+        console.log(data);
+        return data;
+    })
+    
+});
 }
-useData();
-
+useData()

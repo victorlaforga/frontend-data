@@ -7,7 +7,7 @@ PREFIX edm: <http://www.europeana.eu/schemas/edm/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
 SELECT ?lengte ?cho ?place ?placeRegio ?placeRegioName ?title ?pic WHERE {
-?cho edm:isRelatedTo <https://hdl.handle.net/20.500.11840/termmaster2091> .
+?cho edm:isRelatedTo <https://hdl.handle.net/20.500.11840/termmaster1832> .
 ?cho dct:spatial ?place .
 ?cho dc:title ?title .
 ?cho edm:isShownBy ?pic .
@@ -29,9 +29,9 @@ export async function runQuery (url, query) {
       .then(json => {
         const dataArray = json.results.bindings;
         
-        
+        console.log(dataArray);
         return dataArray;
-      })
+      });
     return fetched;    
   };
   

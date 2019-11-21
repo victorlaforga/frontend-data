@@ -2,7 +2,7 @@
 body {
   display: flex;
   flex-direction: column;
-  background: #BBE4EA;
+  background: #37B6F6;
 }
 div svg {
   margin-left: 45px;
@@ -12,28 +12,63 @@ div svg {
     position: relative;
     height: 50%;
     width: 70%;
-    
+    max-height: 600px;
     justify-content: center;
-    background-color:#79C2D0;
+    background-color: #882FF6;
     overflow: scroll;
     left: 2%;
   white-space: nowrap;
+  border-radius: 7px;
 }
 
-h1 {
-margin-bottom: 50px;
-text-align: center;
+#filter {
+  width: 270px;
+  border: 2px solid #F99D07;
+  border-radius: 7px;
+  align-self: flex-end;
+  margin-top: -600px;
+  margin-right: 30px;
+
+}
+
+h1,h2,h3 {
+
 font-family: 'Josefin Sans', sans-serif;
 }
-rect {
-    fill: #5485B5;
 
+h1, h2 {
+  margin-bottom: 50px;
+  text-align: center;
+}
+rect {
+    fill: #F9E104;
+
+  }
+
+  .bar:hover {
+    fill: #F99D07;
   }
 #content div {
     top: 125px;
     left: 50px;
     padding: 15px;
-    border: 2px solid rgb(0, 195, 255);
+    border: 2px solid #F99D07;
     border-radius: 10px;
-    
+    color: white;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    max-height: 400px;
+    background-color: rgba(255,255,255,0.5);
+
+}
+
+#content div img {
+  max-width: 260px;
+  max-height: 350px;
+  margin-top: 10px;
+  
+}
+div #text {
+  max-width: 200px;
 }

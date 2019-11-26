@@ -44,7 +44,9 @@ rect {
     fill: #F9E104;
 
   }
-
+.filters {
+  display: block;
+}
   .bar:hover {
     fill: #F99D07;
   }
@@ -59,16 +61,18 @@ rect {
     display: flex;
     flex-direction: column;
     max-height: 400px;
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255,255,255,0.6);
 
 }
 
 #content div img {
   max-width: 260px;
-  max-height: 350px;
+  max-height: 310px;
   margin-top: 10px;
-  
+  display: block;
+  border-radius: 7px;
 }
 div #text {
   max-width: 200px;
 }
+

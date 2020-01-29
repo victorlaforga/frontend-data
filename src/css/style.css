@@ -93,3 +93,29 @@ div #text {
   margin: 15px 15px 15px 15%;;
 
 }
+
+#info {
+  width: 250px;
+  height: 50px;
+ 
+  margin: 0px 20px 20px 25px;
+  padding: 10px;
+  border-radius: 10px;
+  position: absolute;
+  color: black;
+  background: rgba(216, 76, 58, 0.863);
+}
+#info img {
+  width: 25px;
+  height: auto;
+
+}
+
+#info p {
+  position: absolute;
+  margin: -30px 0px 0px 40px;
+  width: 220px;
+}
+svg {
+  border-bottom: 4px solid white;
+}

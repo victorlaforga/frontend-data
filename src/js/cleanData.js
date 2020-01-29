@@ -36,6 +36,7 @@ export function useData() {
       newArr.title = item.title.value;
       newArr.pic = item.pic.value;
       newArr.regio = item.placeRegioName.value;
+      newArr.continent = item.continentLabel.value;
       return newArr;
     });
     // for loop gemaakt met Eyup & Robert
@@ -48,18 +49,23 @@ export function useData() {
       return !Number.isNaN(element.size);
     });
     const dataWithoutSmallValues = sizesFilter.filter(element => {
-      if (element.size > 2) {
+      if (element.size > 2 && element.size < 400) {
         return element.size;
       }
+    
     });
 
     let data = dataWithoutSmallValues;
-    console.log(data);
-    const dataAscending = dataWithoutSmallValues
-      .map(element => {
-        return element.size;
-      })
-      .sort(d3.ascending);
+    console.log("test", data)
+
+    // let hoogLaag = data
+    // .sort(function(x, y){
+    //   return d3.descending(x.size, y.size)
+    // })
+    // console.log(laagHoog)
+    // console.log(hoogLaag)
+   
+    
 
     // tooltip samen met Gio gemaakt
     let tooltip = d3
@@ -86,14 +92,17 @@ export function useData() {
       .select("#content")
       .append("svg")
       .attr("width", width)
-      .attr("height", height);
+      .attr("height", height).append('g');
 
-    const xScale = d3
+    let xScale = d3
       .scaleBand()
       .domain([d3.min(data), d3.max(data)])
       .rangeRound([0, width], 0.09);
 
-  
+     
+      
+
+     
     //Create bars
     svg
       .selectAll("rect")
@@ -111,7 +120,7 @@ export function useData() {
       .attr("height", function(d) {
         return d.size;
       })
-    
+  
       .on("click", d => {
         tooltip
           .style("visibility", "visible")
@@ -150,16 +159,142 @@ export function useData() {
       .attr("font-family", "sans-serif")
       .attr("font-size", "20px")
       .attr("fill", "white");
-
+      
+     
   
-      // Sort from low to high
-      d3.select("#lowToHigh").on("click", data => {
-        console.log(data);
+  // const inputValueOceanen = document.querySelector(".checkbox.Oceanen").value;
+  // const inputValueAntartica = document.querySelector(".checkbox.Antarctica").value;
+  // const inputValueNoordpool = document.querySelector(".checkbox.Noordpool").value;
 
+  function update() {
+    let currentContinent = this.value;
+    console.log(currentContinent)
+    let newdata = data;
     
+    function sort(data) {
+      if(currentContinent === "lowToHigh"){
+        return data
+        .sort(function(x, y){
+          return d3.ascending(x.size, y.size);
+        });
+      } else if(currentContinent === "highToLow") {
+        return data
+        .sort(function(x, y){
+          return d3.descending(x.size, y.size);
+        });
+      } else if(currentContinent === "all" || currentContinent === "Oceanië" || currentContinent === "Amerika" || currentContinent === "Afrika" || currentContinent === "Eurazië" || currentContinent === "Azië") {
+        return data.filter(d => d.continent === currentContinent);
+      }
+    }
+    newdata = sort(data);
+    
+    let rectangles = svg
+      .selectAll("rect")
+      .data(newdata);
+
+    rectangles.exit()
+      .remove();
+
+    let rectangleEnter = rectangles.enter(); 
+
+    rectangleEnter.append("rect").merge(rectangles)
+    .attr("class", "bar")
+    .attr("x", function(d, i) {
+      return i * (barWidth + barOffset);
+    })
+    .attr("y", function(d) {
+      return height - d.size;
+    })
+    .attr("width", barWidth)
+    .attr("height", function(d) {
+      return d.size;
+    })
+    .on("click", d => {
+      tooltip
+        .style("visibility", "visible")
+        .append("h3")
+        .text(d.title)
+        .style("font-family", `'Josefin Sans', sans-serif`)
+        .append("p")
+        .text("Regio: " + d.regio)
+        .append("img")
+        .attr("src", d.pic);
+    })
+    .on("mouseout", d => {
+      tooltip.style("visibility", "hidden");
+      if (d.size == d.size) {
+        d3.select("h3").remove();
+      }
+    });
+
+    rectangles.selectAll("rect")
+    .attr("x", function(d, i) {
+      return i * (barWidth + barOffset);
+    })
+    .attr("y", function(d) {
+      return height - d.size;
+    })
+    .attr("width", barWidth)
+    .attr("height", function(d) {
+      return d.size;
+    })
+    .on("click", d => {
+      tooltip
+        .style("visibility", "visible")
+        .select("h3")
+        .text(d.title)
+        .style("font-family", `'Josefin Sans', sans-serif`)
+        .select("p")
+        .text("Regio: " + d.regio)
+        .select("img")
+        .attr("src", d.pic);
+    })
+    .on("mouseout", d => {
+      tooltip.style("visibility", "hidden");
+      if (d.size == d.size) {
+        d3.select("h3").remove();
+      }
+    });
+
+    let text = svg
+      .selectAll("text")
+      .data(newdata)
+
+    text.exit().remove();
+
+    let textEnter = text.enter()
+
+    textEnter.append("text")
+      .merge(text)
+      .text(function(d) {
+        return d.size;
+      })
+      .attr("text-anchor", "middle")
+      .attr("x", function(d, i) {
+        return i * (barWidth + barOffset) + 37;
+      })
+      .attr("y", function(d) {
+        return height - (d.size + 8);
       });
-  
-  
+      
+    text.selectAll("text")
+    .text(function(d) {
+      return d.size;
+    })
+    .attr("text-anchor", "middle")
+    .attr("x", function(d, i) {
+      return i * (barWidth + barOffset) + 37;
+    })
+    .attr("y", function(d) {
+      return height - (d.size + 8);
+    });
+    }
+
+  document.getElementById("lowToHigh").addEventListener("click", update);
+  const options = document.querySelector('#option');
+  options.addEventListener('change', update);
+
+  document.getElementById("highToLow").addEventListener("click", update);
   });
 }
 

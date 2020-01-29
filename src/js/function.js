@@ -5,8 +5,7 @@ PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX edm: <http://www.europeana.eu/schemas/edm/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-
-SELECT ?lengte ?cho ?place ?placeRegio ?placeRegioName ?title ?pic WHERE {
+SELECT ?lengte ?cho ?placeRegioName ?title ?pic ?continentLabel WHERE {
 ?cho edm:isRelatedTo <https://hdl.handle.net/20.500.11840/termmaster1832> .
 ?cho dct:spatial ?place .
 ?cho dc:title ?title .
@@ -14,7 +13,10 @@ SELECT ?lengte ?cho ?place ?placeRegio ?placeRegioName ?title ?pic WHERE {
 ?place skos:broader ?placeRegio .
 ?placeRegio skos:prefLabel ?placeRegioName .
   ?cho dct:extent ?lengte.
-} 
+  <https://hdl.handle.net/20.500.11840/termmaster2> skos:narrower ?continent .
+    ?continent skos:prefLabel ?continentLabel .
+    ?continent skos:narrower* ?place .
+} GROUP BY ?continentLabel
 `;
 export const url =
   "https://api.data.netwerkdigitaalerfgoed.nl/datasets/ivo/NMVW/services/NMVW-16/sparql";

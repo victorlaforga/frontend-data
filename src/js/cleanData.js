@@ -56,15 +56,7 @@ export function useData() {
     });
 
     let data = dataWithoutSmallValues;
-    console.log("test", data)
-
-    // let hoogLaag = data
-    // .sort(function(x, y){
-    //   return d3.descending(x.size, y.size)
-    // })
-    // console.log(laagHoog)
-    // console.log(hoogLaag)
-   
+    console.log("test", data)   
     
 
     // tooltip samen met Gio gemaakt
@@ -160,11 +152,7 @@ export function useData() {
       .attr("font-size", "20px")
       .attr("fill", "white");
       
-     
-  
-  // const inputValueOceanen = document.querySelector(".checkbox.Oceanen").value;
-  // const inputValueAntartica = document.querySelector(".checkbox.Antarctica").value;
-  // const inputValueNoordpool = document.querySelector(".checkbox.Noordpool").value;
+    
 
   function update() {
     let currentContinent = this.value;

@@ -1,6 +1,6 @@
 # KidsTreasures
 
-Deze applicatie visualiseert alle speelgoed van kinderen die ze vroeger gebruikten. De applicatie maakt gebruik van de D3 library en de database van het NMVW (Nationaal Museum Van Wereldculturen)
+Deze applicatie visualiseert alle speelgoed van kinderen die ze vroeger gebruikten. De applicatie maakt gebruik van de D3 library en de database van het NMVW (Nationaal Museum Van Wereldculturen). Binnen de applicatie zelf kan je op continent filteren. Ook kan je het speelgoed sorteren op lengte (hoog-laag & laag-hoog)
 
 ![](https://user-images.githubusercontent.com/37700441/73372973-570b5e80-42b8-11ea-8c15-40065dc4f161.png)
 
@@ -19,7 +19,7 @@ Om de collectie te bekijken verwijs ik je naar: [https://collectie.wereldculture
 4. Zorg dat je verbonden bent met een internetverbinding. Anders werkt het data ophalen niet.
 5. Om de applicatie te runnen open het bestan index.html
 
-## SparQL
+## SparQL & data
 
 Deze Query heb ik gebruikt om de data op te halen. Hierin haal ik de plek van het object, regio, titel, afbeelding, lengte & het continent ervan.
 
